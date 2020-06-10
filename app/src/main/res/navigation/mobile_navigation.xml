@@ -38,6 +38,9 @@
             android:name="search"
             app:argType="string"
             android:defaultValue="default"/>
+        <action
+            android:id="@+id/action_mealFragment_to_detailMealFragment"
+            app:destination="@id/detailMealFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -46,6 +49,16 @@
         <argument
             android:name="search_by_name"
             app:argType="string"
-            android:defaultValue="default"/>e
+            android:defaultValue="default"/>
+    </fragment>
+    <fragment
+        android:id="@+id/detailMealFragment"
+        android:name="com.example.themealdb.ui.home.DetailMealFragment"
+        android:label="fragment_detail_meal"
+        tools:layout="@layout/fragment_detail_meal" >
+        <argument
+            android:name="search_by_id"
+            app:argType="string"
+            android:defaultValue="Search"/>
     </fragment>
 </navigation>

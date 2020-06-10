@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.fragment_home.*
 class HomeFragment : Fragment(), MealCategoryAdapter.ClickLinstener {
 
     private  var mealCategoryViewModel : MealCategoryViewModel = MealCategoryViewModel()
-    private var mealadapter:MealCategoryAdapter = MealCategoryAdapter()
+    private var mealCategoryadapter:MealCategoryAdapter = MealCategoryAdapter()
     private lateinit var viewManager : RecyclerView.LayoutManager
 
     override fun onCreateView(
@@ -42,8 +42,8 @@ class HomeFragment : Fragment(), MealCategoryAdapter.ClickLinstener {
     super.onViewCreated(view, savedInstanceState)
     viewManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
     recyler_meal.layoutManager = viewManager
-    recyler_meal.adapter = mealadapter
-    mealadapter.setOnClickListener(this)
+    recyler_meal.adapter = mealCategoryadapter
+    mealCategoryadapter.setOnClickListener(this)
     observeViewModel()
 
     search_meal.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
@@ -61,7 +61,7 @@ class HomeFragment : Fragment(), MealCategoryAdapter.ClickLinstener {
   fun observeViewModel(){
     mealCategoryViewModel = ViewModelProviders.of(this).get(MealCategoryViewModel::class.java)
     mealCategoryViewModel.getResult().observe(viewLifecycleOwner, Observer {
-        mealadapter.updateItem(it.categories)
+      mealCategoryadapter.updateItem(it.categories)
 
     })
 

@@ -1,7 +1,9 @@
 package com.example.themealdb.api
 
-import com.example.themealdb.model.detailMeal.SearchMeal
-import com.example.themealdb.model.meal.Meal
+import android.util.Log
+import com.example.themealdb.model.detailMeal.Meal
+import com.example.themealdb.model.detailMeal.MealDetail
+
 import com.example.themealdb.model.mealCategory.MealCategory
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -27,12 +29,17 @@ class MealApi{
       return  mealApiInterface.getCategory()
     }
 
-    fun getMeal(c: String): Call<Meal>{
+    fun getMeal(c: String): Call<MealDetail>{
       return mealApiInterface.getMeal(c)
     }
 
-  fun serachMeal(s: String): Call<SearchMeal>{
+  fun serachMeal(s: String): Call<MealDetail>{
     return mealApiInterface.searchMeal(s)
+  }
+
+  fun serachById(i: String): Call<MealDetail>{
+
+    return mealApiInterface.searchById(i)
   }
 
 

@@ -1,13 +1,12 @@
 package com.example.themealdb.viewmodel
 
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.themealdb.api.MealApi
-import com.example.themealdb.model.detailMeal.SearchMeal
-import com.example.themealdb.model.meal.Meal
+import com.example.themealdb.model.detailMeal.Meal
+import com.example.themealdb.model.detailMeal.MealDetail
 import com.example.themealdb.model.mealCategory.MealCategory
 import retrofit2.Call
 import retrofit2.Callback
@@ -17,15 +16,17 @@ class MealCategoryViewModel :  ViewModel(){
     var loading : MutableLiveData<Boolean> = MutableLiveData()
     var error : MutableLiveData<Boolean> = MutableLiveData()
     var result : MutableLiveData<MealCategory> = MutableLiveData()
-    var meal : MutableLiveData<Meal> = MutableLiveData()
-    var search_byName : MutableLiveData<SearchMeal> = MutableLiveData()
+    var meal : MutableLiveData<MealDetail> = MutableLiveData()
+    var search_byName : MutableLiveData<MealDetail> = MutableLiveData()
+    var search_byId : MutableLiveData<MealDetail> = MutableLiveData()
     private  var mealApi : MealApi = MealApi()
 
     fun getLoading() : LiveData<Boolean> = loading
     fun getError() : LiveData<Boolean> = error
     fun getResult() : LiveData<MealCategory> = result
-    fun getMeal() : LiveData<Meal> = meal
-    fun getsearchName() : LiveData<SearchMeal> = search_byName
+    fun getMeal() : LiveData<MealDetail> = meal
+    fun getsearchName() : LiveData<MealDetail> = search_byName
+    fun getsearchId() : LiveData<MealDetail> = search_byId
 
 
   fun setResult(){
@@ -50,13 +51,13 @@ class MealCategoryViewModel :  ViewModel(){
   fun setMeal(search: String)
   {
       val search_category = mealApi.getMeal(search)
-      search_category.enqueue(object : Callback<Meal>{
-        override fun onFailure(call: Call<Meal>, t: Throwable) {
+      search_category.enqueue(object : Callback<MealDetail>{
+        override fun onFailure(call: Call<MealDetail>, t: Throwable) {
 
         }
 
-        override fun onResponse(call: Call<Meal>, response: Response<Meal>) {
-          var mealList = Meal(response.body()?.meals?: emptyList())
+        override fun onResponse(call: Call<MealDetail>, response: Response<MealDetail>) {
+          var mealList = MealDetail(response.body()?.meals?: emptyList())
           Log.d("viewmodel","$mealList")
           meal.value = mealList
         }
@@ -66,15 +67,47 @@ class MealCategoryViewModel :  ViewModel(){
 
   fun setSearchName(search_name : String){
     val search_meal = mealApi.serachMeal(search_name)
-    search_meal.enqueue(object : Callback<SearchMeal>{
-      override fun onFailure(call: Call<SearchMeal>, t: Throwable) {
+    search_meal.enqueue(object : Callback<MealDetail>{
+      override fun onFailure(call: Call<MealDetail>, t: Throwable) {
 
       }
 
-      override fun onResponse(call: Call<SearchMeal>, response: Response<SearchMeal>) {
-        var searchList = SearchMeal(response?.body()?.meals?: emptyList())
+      override fun onResponse(call: Call<MealDetail>, response: Response<MealDetail>) {
+        var searchList = MealDetail(response?.body()?.meals?: emptyList())
         search_byName.value = searchList
       }
+
+    })
+  }
+
+//  fun setSearcById(search_id :  String){
+//    val searchId = mealApi.serachById(search_id)
+//    searchId.enqueue(object : Callback<SearchMeal>{
+//      override fun onFailure(call: Call<SearchMeal>, t: Throwable) {
+//        TODO("Not yet implemented")
+//      }
+//
+//      override fun onResponse(call: Call<SearchMeal>, response: Response<SearchMeal>) {
+//        var idlist = SearchMeal(response.body()?.meals?: emptyList())
+//        search_byId.value = idlist
+//      }
+//
+//    })
+//  }
+
+  fun setSearchById(search_id : String){
+    val searchId = mealApi.serachById(search_id)
+    searchId.enqueue(object : Callback<MealDetail>{
+      override fun onFailure(call: Call<MealDetail>, t: Throwable) {
+        TODO("Not yet implemented")
+      }
+
+      override fun onResponse(call: Call<MealDetail>, response: Response<MealDetail>) {
+        var mealList  = MealDetail(response.body()?.meals?: emptyList())
+        Log.d("mealList" ,"$mealList")
+        search_byId.value = mealList
+      }
+
 
     })
   }

@@ -6,11 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.themealdb.R
-import com.example.themealdb.model.meal.MealX
+import com.example.themealdb.model.detailMeal.Meal
+
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.meal_all.view.*
 
-class MealAdapter(var mealList:List<MealX> = ArrayList()) : RecyclerView.Adapter<MealViewHolder>() {
+class MealAdapter(var mealList:List<Meal> = ArrayList()) : RecyclerView.Adapter<MealAdapter.MealViewHolder>() {
+  var mClickListener : ClickLinstener? = null
+  interface ClickLinstener{
+    fun onClick(next: Meal)
+  }
+  fun setOnClickListener(clickLinstener: ClickLinstener){
+    this.mClickListener = clickLinstener
+  }
+
   override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MealViewHolder {
     return  MealViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.meal_all,parent,false))
   }
@@ -24,22 +33,34 @@ class MealAdapter(var mealList:List<MealX> = ArrayList()) : RecyclerView.Adapter
      holder.bindMeal(mealList[position])
   }
 
-  fun updateMeal(meal: List<MealX>)
+  fun updateMeal(meal: List<Meal>)
   {
     this.mealList = meal
     notifyDataSetChanged()
   }
 
-}
+ inner class MealViewHolder(itemView:View): RecyclerView.ViewHolder(itemView), View.OnClickListener{
+    private lateinit var mealx :Meal
+    private var view : View = itemView
+    init {
+      view.setOnClickListener(this)
+         }
+    fun bindMeal(meal:Meal){
+      this.mealx = meal
+      view.meal_name.text = mealx.strMeal
 
-class MealViewHolder(itemView:View): RecyclerView.ViewHolder(itemView){
+      Picasso.get()
+        .load(mealx.strMealThumb)
+        .placeholder(R.drawable.ic_menu_camera)
+        .into(view.c_meal_image)
+    }
 
-  fun bindMeal(meal:MealX){
-    itemView.meal_name.text = meal.strMeal
+    override fun onClick(v: View?) {
+      mClickListener?.onClick(mealx)
+    }
 
-    Picasso.get()
-      .load(meal.strMealThumb)
-      .placeholder(R.drawable.ic_menu_camera)
-      .into(itemView.c_meal_image)
+
   }
+
 }
+

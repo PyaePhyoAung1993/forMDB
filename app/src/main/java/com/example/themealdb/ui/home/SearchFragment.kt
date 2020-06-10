@@ -6,22 +6,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.themealdb.R
-import com.example.themealdb.adapter.MealAdapter
 import com.example.themealdb.adapter.SearchMealAdapter
-import com.example.themealdb.model.detailMeal.MealsItem
 import com.example.themealdb.viewmodel.MealCategoryViewModel
-import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.fragment_meal.*
 import kotlinx.android.synthetic.main.fragment_search.*
 
 
 class SearchFragment : Fragment() {
   private lateinit var viewManager : RecyclerView.LayoutManager
-  private var mealCategoryViewModel : MealCategoryViewModel = MealCategoryViewModel()
+    private var mealCategoryViewModel : MealCategoryViewModel = MealCategoryViewModel()
   private var mealAdapter : SearchMealAdapter = SearchMealAdapter()
   override fun onCreateView(
     inflater: LayoutInflater, container: ViewGroup?,
@@ -41,7 +38,8 @@ class SearchFragment : Fragment() {
 
   fun searchObserView(){
     mealCategoryViewModel.getsearchName().observe(viewLifecycleOwner, Observer {
-        mealAdapter.updateSearchMeal(it.meals as List<MealsItem>)
+        mealAdapter.updateSearchMeal(it.meals)
+
     })
   }
 
@@ -51,6 +49,7 @@ class SearchFragment : Fragment() {
 
     var searchMeal: String? = messageArgs?.searchByName
     Log.d("searchMeal",searchMeal.toString())
+    (activity as AppCompatActivity).supportActionBar?.title = searchMeal.toString()
     mealCategoryViewModel.setSearchName(searchMeal.toString())
   }
 
